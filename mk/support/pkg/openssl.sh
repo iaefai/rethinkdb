@@ -24,19 +24,6 @@ pkg_configure () {
 pkg_install () {
     pkg_copy_src_to_build
 
-    if [[ "$CROSS_COMPILING" = 1 ]]; then
-        configure_flags="--host=$($CXX -dumpmachine)"
-    fi
-
-    pkg_configure ${configure_flags:-}
-
-    # if [[ "$CROSS_COMPILING" = 1 ]]; then
-    #     export cross=$($CXX -dumpmachine)
-    #     case ${cross%%-*} in
-    #         arm*) sed -i.bak s/-m64// "$build_dir/Makefile";;
-    #     esac
-    # fi
-
     # Compiling without -j1 causes a lot of "undefined reference" errors
     pkg_make -j1
 
