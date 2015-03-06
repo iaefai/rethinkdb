@@ -296,7 +296,9 @@ load_pkg "$1"
 shift
 
 # Trace commands
-set -x
+if "$TRACE"; then
+    set -x
+fi
 
 # Prepare the environment
 pkg_depends_env
