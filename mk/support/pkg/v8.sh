@@ -6,7 +6,9 @@ src_url=http://commondatastorage.googleapis.com/chromium-browser-official/v8-$ve
 
 pkg_fetch () {
     pkg_fetch_archive
-    find "$src_dir"/third_party/icu/* -maxdepth 0 -not -name 'icu.gyp*' -print0 | xargs -0 rm -rf
+    if [[ "$CROSS_COMPILING" != 1 ]]; then
+        find "$src_dir"/third_party/icu/* -maxdepth 0 -not -name 'icu.gyp*' -print0 | xargs -0 rm -rf
+    fi
 }
 
 pkg_install-include () {

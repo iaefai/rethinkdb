@@ -5,10 +5,17 @@ src_url="https://www.openssl.org/source/openssl-$version.tar.gz"
 
 
 pkg_configure () {
+    case $($CXX -dumpmachine) in
+        arm*) arch=arm ;;
+        *)    arch=
+    esac
+
     # use shared instead of no-shared because curl's configure script
     # fails on some platforms if it can't find -lssl
     if [[ "$OS" = "Darwin" ]]; then
         in_dir "$build_dir" ./Configure darwin64-x86_64-cc -shared --prefix="$(niceabspath "$install_dir")"
+    elif [[ "$arch" = arm ]]; then
+        in_dir "$build_dir" ./Configure linux-armv4 -shared --prefix="$(niceabspath "$install_dir")"
     else
         in_dir "$build_dir" ./config shared --prefix="$(niceabspath "$install_dir")"
     fi
@@ -17,7 +24,18 @@ pkg_configure () {
 pkg_install () {
     pkg_copy_src_to_build
 
-    pkg_configure
+    if [[ "$CROSS_COMPILING" = 1 ]]; then
+        configure_flags="--host=$($CXX -dumpmachine)"
+    fi
+
+    pkg_configure ${configure_flags:-}
+
+    # if [[ "$CROSS_COMPILING" = 1 ]]; then
+    #     export cross=$($CXX -dumpmachine)
+    #     case ${cross%%-*} in
+    #         arm*) sed -i.bak s/-m64// "$build_dir/Makefile";;
+    #     esac
+    # fi
 
     # Compiling without -j1 causes a lot of "undefined reference" errors
     pkg_make -j1

@@ -134,7 +134,7 @@ pkg_install () {
         error "cannot install package, it has not been fetched"
     fi
     pkg_copy_src_to_build
-    pkg_configure
+    pkg_configure ${configure_flags:-}
     pkg_make install
 }
 
