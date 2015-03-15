@@ -1,6 +1,10 @@
 // Copyright 2010-2012 RethinkDB, all rights reserved.
 #include "arch/fd_send_recv.hpp"
 
+#if defined(__OpenBSD__) // needed for iovec
+#include <sys/uio.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/socket.h>
 
