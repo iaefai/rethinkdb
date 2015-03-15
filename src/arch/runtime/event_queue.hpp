@@ -28,7 +28,7 @@ struct pm_eventloop_singleton_t {
 };
 
 /* Pick the queue now*/
-#if defined(__MACH__)
+#if defined(__MACH__) || defined(__OpenBSD__)
 
 // Use kqueue, which is much faster than poll on OS X
 #include "arch/runtime/event_queue/kqueue.hpp"

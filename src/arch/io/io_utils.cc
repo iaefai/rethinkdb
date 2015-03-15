@@ -8,9 +8,11 @@
 
 #include "logger.hpp"
 
+#if !defined(__OpenBSD__)
 int _gettid() {
     return syscall(SYS_gettid);
 }
+#endif
 
 fd_t scoped_fd_t::reset(fd_t f2) {
     if (fd != INVALID_FD) {
