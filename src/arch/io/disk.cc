@@ -425,7 +425,7 @@ file_open_result_t open_file(const char *path, const int mode, io_backender_t *b
 
     // For now, we have a whitelist of kernels that don't support O_LARGEFILE.  Linux is
     // the only known kernel that has (or may need) the O_LARGEFILE flag.
-#ifndef __MACH__
+#if defined(__linux__)
     flags |= O_LARGEFILE;
 #endif
 
@@ -476,6 +476,12 @@ file_open_result_t open_file(const char *path, const int mode, io_backender_t *b
                                     static_cast<long>(flags | O_DIRECT));  // NOLINT(runtime/int)
 #elif defined(__APPLE__)
         const int fcntl_res = fcntl(fd.get(), F_NOCACHE, 1);
+#elif defined(__OpenBSD__)
+//      O_SYNC       Cause writes to be synchronous.  Data will be written to the
+//                   physical device instead of just being stored in the buffer
+//                   cache; corresponds to the O_SYNC flag of open(2).
+//      Using this because it is the closest to direct I have, and it clears the error.
+        const int fcntl_res = fcntl(fd.get(), F_SETFL, O_SYNC);
 #else
 #error "Figure out how to do direct I/O and fsync correctly (despite your operating system's lies) on your platform."
 #endif  // __linux__, defined(__APPLE__)
