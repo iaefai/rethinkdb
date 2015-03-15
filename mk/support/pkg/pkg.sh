@@ -110,7 +110,11 @@ pkg_move_tmp_to_src () {
 
 pkg_copy_src_to_build () {
     mkdir -p "$build_dir"
-    cp -af "$src_dir/." "$build_dir"
+    if [ x$OS = xOpenBSD ]; then
+        cp -pPRf "$src_dir/." "$build_dir"
+    else
+        cp -af "$src_dir/." "$build_dir"
+    fi
 }
 
 pkg_install-include () {
@@ -126,7 +130,11 @@ pkg_configure () {
 }
 
 pkg_make () {
-    in_dir "$build_dir" make "$@"
+    if [ x$OS = xOpenBSD ]; then
+        in_dir "$build_dir" gmake "$@"
+    else 
+        in_dir "$build_dir" make "$@"
+    fi
 }
 
 pkg_install () {

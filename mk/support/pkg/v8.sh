@@ -13,7 +13,11 @@ pkg_install-include () {
     rm -rf "$install_dir/include"
     mkdir -p "$install_dir/include"
     cp -RL "$src_dir/include/." "$install_dir/include"
-    sed -i.bak 's/include\///' "$install_dir/include/libplatform/libplatform.h"
+    if [ x$OS = xOpenBSD ]; then
+        sed 's/include\///' "$install_dir/include/libplatform/libplatform.h" >"$install_dir/include/libplatform/libplatform.h"
+    else
+        sed -i.bak 's/include\///' "$install_dir/include/libplatform/libplatform.h"
+    fi
 }
 
 pkg_install () {
