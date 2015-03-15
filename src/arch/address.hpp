@@ -3,6 +3,11 @@
 #define ARCH_ADDRESS_HPP_
 
 #include <arpa/inet.h>   /* for `inet_ntop()` */
+
+#if defined(__OpenBSD__) // needed for if.h
+#include <sys/socket.h>
+#endif
+
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
