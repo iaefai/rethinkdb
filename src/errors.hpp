@@ -18,6 +18,10 @@
 #ifdef __MACH__
 #define BREAKPOINT (raise(SIGTRAP))
 #endif
+
+#ifdef __OpenBSD__
+#define BREAKPOINT (raise(SIGTRAP))
+#endif
 #else /* Breakpoints Disabled */
 #define BREAKPOINT
 #endif /* DISABLE_BREAKPOINTS */
