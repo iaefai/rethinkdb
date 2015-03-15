@@ -256,7 +256,7 @@ RT_CXXFLAGS += -I$(PROTO_DIR)
 
 #### Finding what to build
 
-SOURCES := $(shell find $(SOURCE_DIR) -name '*.cc' -not -name '\.*')
+SOURCES := $(shell find $(SOURCE_DIR) -name '*.cc' ! -name '\.*')
 
 SERVER_EXEC_SOURCES := $(filter-out $(SOURCE_DIR)/unittest/%,$(SOURCES))
 
